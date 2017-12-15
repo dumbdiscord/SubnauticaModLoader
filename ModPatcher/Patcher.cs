@@ -18,36 +18,26 @@ public static class Patcher
 
         if (!Directory.Exists("Mods"))
         {
-            Debug.Log("ModLoader: Folder \"Mods\" not found! Aborting Patch...");
+            Debug.Log("ModLoader: Folder \"Mods\" not found! Creating...");
+            Directory.CreateDirectory("Mods");
             return;
         }
         
         MainThread = Thread.CurrentThread;
-        var instance = HarmonyInstance.Create("com.railway.moreeggs");
+        var instance = HarmonyInstance.Create("com.railway.modloader");
         DLLFinder.FindDLLs("Mods");
         
-        //aterParkCreature.waterParkCreatureParameters[TechType.ReaperLeviathan] = new WaterParkCreatureParameters(0.01f, 0.05f, 0.1f, 5f, false);
-        //WaterParkCreature.waterParkCreatureParameters[TechType.GhostLeviathan] = new WaterParkCreatureParameters(0.01f, 0.03f, 0.1f, 5f, false);
-        //WaterParkCreature.waterParkCreatureParameters[TechType.SeaDragon] = new WaterParkCreatureParameters(0.01f, 0.02f, 0.1f, 5f, false);
-        //WaterParkCreature.waterParkCreatureParameters[TechType.Warper] = new WaterParkCreatureParameters(0.02f, 0.25f, 0.5f, 1f, false);
-        //WaterParkCreature.waterParkCreatureParameters[TechType.SeaTreader] = new WaterParkCreatureParameters(0.03f, 0.2f, 0.5f, 1f, false);
-        //WaterParkCreature.creatureEggs[TechType.GhostRayBlue] = (TechType)9999;
-        //WaterParkCreature.creatureEggs[TechType.GhostRayRed] = (TechType)6969;
+
 
 
         Application.runInBackground = true;
 
         AlternativeSerializer.RegisterCustomSerializer(-5, typeof(ScaleFixer), new ScaleFixerSerializer());
-        //var h = typeof(CraftData).GetField("blacklist",BindingFlags.Static|BindingFlags.NonPublic).GetValue(null) as HashSet<TechType>;
-        //h.Clear();
-        DLLFinder.PrepatchDLLs();
 
-        //Debug.Log("doing " + CustomResourceManager.customResources[1].LoadResource().name);
-        //var targ = typeof(UWE.PrefabDatabase).GetMethod("GetPrefabForFilenameAsyncImpl", BindingFlags.NonPublic | BindingFlags.Static);
-        //instance.Patch(targ,null, new HarmonyMethod(typeof(Patcher).GetMethod("Prefix")));
+        DLLFinder.PrepatchDLLs();
+        AssetBundleLoader.Unload();
         TechTypePatcher.Patch(instance);
 
-        //Debug.Log("Heh "+(int)Enum.Parse(typeof(TechType),"GhostRayBlueEgg"));
 
 
         DLLFinder.PatchDLLs();
@@ -60,8 +50,7 @@ public static class Patcher
         LootPatcher.Patch(instance);
         WorldEntityInfoPatcher.Patch(instance);
         DLLFinder.PostPatchDLLs();
-        //Debug.Log("Testing " + (bool)Resources.Load<GameObject>("WorldEntities/Eggs/GhostRayBlueEgg"));
-        //instance.PatchAll(Assembly.GetExecutingAssembly());
+
 
 
     }
@@ -87,13 +76,12 @@ public static class Patcher
                         s.AppendLine(indenter + newtype.Name + " " + f.Name+" "+h.ToString());
                         continue;
                     }
-                    //if (newtype.GetInterface("IEnumerable").Equals(null))
-                    //{
+
                     s.AppendLine(indenter + newtype.Name + " " + f.Name);
                     DumpType(h.GetType(), h, s, indenter + "    ");
 
                     continue;
-                    //}
+                    
                     
                     
                 }

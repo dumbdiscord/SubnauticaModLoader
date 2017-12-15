@@ -14,7 +14,7 @@ public static class CustomSpriteManager
     {
         foreach(var c in customSprites)
         {
-            //c.Patch();
+            c.Patch();
         }
         PostFix();
         //instance.Patch(TargetMethod(), null, new HarmonyMethod(typeof(CustomSpriteManager).GetMethod("PostFix")));

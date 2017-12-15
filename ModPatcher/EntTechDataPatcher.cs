@@ -32,7 +32,7 @@ public static class EntTechDataPatcher
             var val = typeof(CraftData).GetField("entTechMap", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null) as Dictionary<string, TechType>;
             foreach (var v in customTechData)
             {
-                Debug.Log("Adding Custom TechData " + v.Key + " " + v.Value.AsString());
+                 Debug.Log("Adding Custom TechData " + v.Key + " " + v.Value.AsString());
                 val[Path.GetFileName(v.Key.ToLowerInvariant())] = v.Value;
             }
             haspatched = true;
